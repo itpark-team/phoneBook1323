@@ -6,6 +6,7 @@ public class Main {
 
         System.out.println(phone.getBalance() + " телефонов на складе");
 
-        System.out.println(phone);
+        System.out.println(phone.toString());
+
     }
 }
