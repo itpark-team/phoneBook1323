@@ -1,6 +1,4 @@
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -10,6 +8,10 @@ public class PhonesStore {
 
     public PhonesStore() {
         phones = new ArrayList<>();
+    }
+
+    public int getPhonesCount() {
+        return phones.size();
     }
 
     public void addPhone(Phone phone) {
@@ -41,10 +43,14 @@ public class PhonesStore {
 
         output = String.format("%3s%20s%15s%15s%17s\n", "№", "Модель", "Цвет", "Цена(руб.)", "Кол-во на складе");
 
-        for (int i = 0; i < phones.size(); i++) {
-            Phone currentPhone = phones.get(i);
+        if (phones.size() > 0) {
+            for (int i = 0; i < phones.size(); i++) {
+                Phone currentPhone = phones.get(i);
 
-            output += String.format("%3d%20s%15s%15d%17d\n", i + 1, currentPhone.getModel(), currentPhone.getColor(), currentPhone.getPrice(), currentPhone.getBalance());
+                output += String.format("%3d%20s%15s%15d%17d\n", i + 1, currentPhone.getModel(), currentPhone.getColor(), currentPhone.getPrice(), currentPhone.getBalance());
+            }
+        } else {
+            output += "Список пуст\n";
         }
 
         return output;
@@ -76,4 +82,25 @@ public class PhonesStore {
         bufferedWriter.close();
         fileWriter.close();
     }
+
+    public void loadPhonesFromFile() throws Exception {
+        FileReader fileReader = new FileReader(dbPhonesFileName);
+        BufferedReader bufferedReader = new BufferedReader(fileReader);
+
+        int size = Integer.parseInt(bufferedReader.readLine());
+        phones.clear();
+
+        for (int i = 0; i < size; i++) {
+            String model = bufferedReader.readLine();
+            String color = bufferedReader.readLine();
+            int price = Integer.parseInt(bufferedReader.readLine());
+            int balance = Integer.parseInt(bufferedReader.readLine());
+
+            phones.add(new Phone(model, color, price, balance));
+        }
+
+        bufferedReader.close();
+        fileReader.close();
+    }
+
 }
